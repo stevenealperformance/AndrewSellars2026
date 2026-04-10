@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<!-- saved from url=(0048)file:///Users/steve_neal/Downloads/index_23.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HR — Work + BWB Ratio</title><style>
+:root{--bg:#0c0f14;--sf:#141820;--bd:#252b3a;--tx:#e2e6ef;--dim:#7a8299;--feb3:#f78166;--apr8:#3fb950}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;background:var(--bg);color:var(--tx);line-height:1.5}
+.hdr{padding:24px 32px 0;display:flex;justify-content:space-between;flex-wrap:wrap;gap:16px}
+.hdr h1{font-size:22px;font-weight:700}.hdr h1 span{color:#58a6ff}
+.hdr .sub{font-size:13px;color:var(--dim);margin-top:4px}
+.coach{font-size:12px;color:var(--dim);background:var(--sf);padding:5px 12px;border-radius:6px;border:1px solid var(--bd)}
+.content{padding:18px 32px 40px}
+.cbox{background:var(--sf);border:1px solid var(--bd);border-radius:10px;padding:20px;margin-bottom:14px}
+.cbox h3{font-size:14px;font-weight:700;margin-bottom:6px}
+.cbox .hint{font-size:11px;color:var(--dim);margin-bottom:10px;font-weight:400}
+canvas{display:block;width:100%;height:auto}
+@media(max-width:900px){.hdr,.content{padding-left:14px;padding-right:14px}}
+</style></head><body>
+<div class="hdr"><div><h1>HR Response — <span>Work Slope + BWB Plateau Ratio</span></h1><div class="sub">Work HR slope over full 3-min block · BWB late/early slope ratio per step</div></div><div class="coach">Coach: Steve Neal</div></div>
+<div class="content">
+  <div class="cbox"><h3>Work HR Slope per Step</h3><div class="hint">bpm/s across the full 3-min work block · Lower = HR more stable across the block, less cardiac drift</div><canvas id="c-work" width="2630" height="720" style="width: 1315px; height: 360px;"></canvas></div>
+  <div class="cbox"><h3>BWB Plateau Ratio — (45-60s slope) / (0-15s slope)</h3><div class="hint">Lower is better · 0.0 = HR has fully plateaued by 45s (recovery done early) · 1.0 = HR still dropping at end of minute · Negative = HR reversed direction</div><canvas id="c-ratio" width="2630" height="800" style="width: 1315px; height: 400px;"></canvas></div>
+</div>
+<script>
+const D={"feb3":[{"step":1,"p":100,"hr_work":0.039,"ratio":-2.392,"early":-0.079,"late":0.189},{"step":2,"p":118,"hr_work":0.03,"ratio":0.736,"early":-0.587,"late":-0.432},{"step":3,"p":139,"hr_work":0.27,"ratio":1.023,"early":-0.796,"late":-0.814},{"step":4,"p":160,"hr_work":0.112,"ratio":0.588,"early":-0.662,"late":-0.389},{"step":5,"p":181,"hr_work":0.143,"ratio":1.113,"early":-0.257,"late":-0.286},{"step":6,"p":201,"hr_work":0.178,"ratio":0.949,"early":-0.335,"late":-0.318},{"step":7,"p":221,"hr_work":0.183,"ratio":0.903,"early":-0.601,"late":-0.543},{"step":8,"p":199,"hr_work":0.117,"ratio":1.373,"early":-0.263,"late":-0.361},{"step":9,"p":179,"hr_work":0.096,"ratio":2.506,"early":-0.154,"late":-0.386},{"step":10,"p":159,"hr_work":0.07,"ratio":1.766,"early":-0.457,"late":-0.807},{"step":11,"p":159,"hr_work":0.088,"ratio":0.403,"early":-0.496,"late":-0.2},{"step":12,"p":182,"hr_work":0.132,"ratio":0.625,"early":-0.509,"late":-0.318},{"step":13,"p":201,"hr_work":0.155,"ratio":0.996,"early":-0.244,"late":-0.243},{"step":14,"p":218,"hr_work":0.148,"ratio":1.658,"early":-0.351,"late":-0.582},{"step":15,"p":200,"hr_work":0.145,"ratio":0.174,"early":-0.551,"late":-0.096},{"step":16,"p":182,"hr_work":0.117,"ratio":0.428,"early":-0.6,"late":-0.257},{"step":17,"p":163,"hr_work":0.067,"ratio":0.641,"early":-0.301,"late":-0.193},{"step":18,"p":163,"hr_work":0.079,"ratio":0.208,"early":-0.481,"late":-0.1},{"step":19,"p":183,"hr_work":0.123,"ratio":0.973,"early":-0.451,"late":-0.439},{"step":20,"p":203,"hr_work":0.144,"ratio":0.554,"early":-0.534,"late":-0.296},{"step":21,"p":221,"hr_work":0.168,"ratio":0.531,"early":-0.572,"late":-0.304},{"step":22,"p":200,"hr_work":0.11,"ratio":0.187,"early":-0.765,"late":-0.143},{"step":23,"p":184,"hr_work":0.09,"ratio":0.128,"early":-0.618,"late":-0.079},{"step":24,"p":163,"hr_work":0.096,"ratio":0.022,"early":-0.499,"late":-0.011},{"step":25,"p":164,"hr_work":0.098,"ratio":0.077,"early":-0.465,"late":-0.036}],"apr8":[{"step":1,"p":103,"hr_work":0.059,"ratio":-0.28,"early":-0.343,"late":0.096},{"step":2,"p":121,"hr_work":0.057,"ratio":-0.045,"early":-0.465,"late":0.021},{"step":3,"p":140,"hr_work":0.076,"ratio":0.073,"early":-0.629,"late":-0.046},{"step":4,"p":164,"hr_work":0.091,"ratio":-0.0,"early":-0.394,"late":0.0},{"step":5,"p":180,"hr_work":0.115,"ratio":0.368,"early":-0.524,"late":-0.193},{"step":6,"p":199,"hr_work":0.135,"ratio":0.658,"early":-0.234,"late":-0.154},{"step":7,"p":218,"hr_work":0.152,"ratio":0.189,"early":-0.641,"late":-0.121},{"step":8,"p":204,"hr_work":0.085,"ratio":-0.198,"early":-0.575,"late":0.114},{"step":9,"p":179,"hr_work":0.081,"ratio":0.242,"early":-0.769,"late":-0.186},{"step":10,"p":158,"hr_work":0.063,"ratio":0.068,"early":-0.369,"late":-0.025},{"step":11,"p":164,"hr_work":0.057,"ratio":0.198,"early":-0.484,"late":-0.096},{"step":12,"p":183,"hr_work":0.1,"ratio":-0.372,"early":-0.5,"late":0.186},{"step":13,"p":201,"hr_work":0.124,"ratio":0.185,"early":-0.249,"late":-0.046},{"step":14,"p":220,"hr_work":0.145,"ratio":0.074,"early":-0.582,"late":-0.043},{"step":15,"p":202,"hr_work":0.1,"ratio":0.075,"early":-0.616,"late":-0.046},{"step":16,"p":183,"hr_work":0.112,"ratio":-0.0,"early":-0.578,"late":0.0},{"step":17,"p":162,"hr_work":0.051,"ratio":0.011,"early":-0.366,"late":-0.004},{"step":18,"p":163,"hr_work":0.06,"ratio":-0.17,"early":-0.613,"late":0.104},{"step":19,"p":182,"hr_work":0.109,"ratio":-0.236,"early":-0.757,"late":0.179},{"step":20,"p":202,"hr_work":0.144,"ratio":0.122,"early":-0.582,"late":-0.071},{"step":21,"p":220,"hr_work":0.153,"ratio":0.54,"early":-0.409,"late":-0.221},{"step":22,"p":201,"hr_work":0.113,"ratio":0.212,"early":-0.641,"late":-0.136},{"step":23,"p":182,"hr_work":0.088,"ratio":-0.343,"early":-0.522,"late":0.179},{"step":24,"p":166,"hr_work":0.081,"ratio":0.204,"early":-0.754,"late":-0.154},{"step":25,"p":163,"hr_work":0.045,"ratio":-0.685,"early":-0.146,"late":0.1}]};
+const COL={feb3:'#f78166',apr8:'#3fb950'};
+const LBL={feb3:'Feb 3',apr8:'Apr 8'};
+
+function drawLine(cv,cfg){
+  const dpr=window.devicePixelRatio||1;
+  const W=cv.parentElement.getBoundingClientRect().width-40;
+  const H=cfg.h||360;
+  cv.width=W*dpr;cv.height=H*dpr;cv.style.width=W+'px';cv.style.height=H+'px';
+  const c=cv.getContext('2d');c.scale(dpr,dpr);
+  const p={t:40,r:25,b:50,l:60};
+  const cw=W-p.l-p.r,ch=H-p.t-p.b;
+  const n=Math.max(D.feb3.length,D.apr8.length);
+  const xP=i=>p.l+(i+0.5)/n*cw;
+  const yP=v=>p.t+(1-(v-cfg.yMin)/(cfg.yMax-cfg.yMin))*ch;
+  c.strokeStyle='#1e2330';c.lineWidth=1;
+  for(let i=0;i<=6;i++){const y=p.t+ch*i/6;c.beginPath();c.moveTo(p.l,y);c.lineTo(W-p.r,y);c.stroke();
+    c.fillStyle='#7a8299';c.font='10px sans-serif';c.textAlign='right';
+    const v=cfg.yMax-(cfg.yMax-cfg.yMin)*i/6;c.fillText(v.toFixed(2),p.l-6,y+3);}
+  if(cfg.yMin<0&&cfg.yMax>0){c.strokeStyle='#4a5060';c.lineWidth=1.5;
+    c.beginPath();c.moveTo(p.l,yP(0));c.lineTo(W-p.r,yP(0));c.stroke();}
+  if(cfg.refs){cfg.refs.forEach(r=>{
+    c.strokeStyle=r.color;c.lineWidth=1;c.setLineDash([4,4]);
+    c.beginPath();c.moveTo(p.l,yP(r.v));c.lineTo(W-p.r,yP(r.v));c.stroke();c.setLineDash([]);
+    c.fillStyle=r.color;c.font='9px sans-serif';c.textAlign='left';
+    c.fillText(r.label,W-p.r-160,yP(r.v)-4);
+  });}
+  c.fillStyle='#7a8299';c.font='10px sans-serif';c.textAlign='center';
+  for(let i=0;i<n;i++){c.fillText((i+1).toString(),xP(i),H-p.b+15);
+    const s=D.feb3[i];if(s)c.fillText(s.p+'W',xP(i),H-p.b+27);}
+  c.fillText('Step # / Power',p.l+cw/2,H-5);
+  c.save();c.translate(13,p.t+ch/2);c.rotate(-Math.PI/2);c.textAlign='center';c.fillStyle='#7a8299';c.font='11px sans-serif';c.fillText(cfg.yLb,0,0);c.restore();
+  cfg.series.forEach(s=>{
+    const pts=D[s.sess].map((r,i)=>({i,v:r[s.key]})).filter(x=>x.v!=null);
+    c.strokeStyle=s.color;c.lineWidth=2.3;
+    c.beginPath();
+    pts.forEach((pt,j)=>{const x=xP(pt.i),y=yP(pt.v);if(j===0)c.moveTo(x,y);else c.lineTo(x,y);});
+    c.stroke();
+    pts.forEach(pt=>{
+      c.beginPath();c.arc(xP(pt.i),yP(pt.v),4,0,Math.PI*2);c.fillStyle=s.color;c.fill();
+      c.strokeStyle='#0c0f14';c.lineWidth=1.5;c.stroke();
+      c.fillStyle=s.color;c.font='8px sans-serif';c.textAlign='center';
+      c.fillText(pt.v.toFixed(cfg.dec||2),xP(pt.i),yP(pt.v)-8);
+    });
+  });
+  let lx=p.l;c.font='12px sans-serif';c.textAlign='left';
+  cfg.series.forEach(s=>{c.fillStyle=s.color;c.beginPath();c.arc(lx+6,12,4.5,0,Math.PI*2);c.fill();
+    c.fillStyle='#e2e6ef';c.fillText(s.label,lx+15,16);lx+=70;});
+}
+
+drawLine(document.getElementById('c-work'),{
+  yMin:-0.05,yMax:0.35,yLb:'HR Slope (bpm/s) · full 3-min block',dec:3,
+  series:[
+    {sess:'feb3',key:'hr_work',color:'#f78166',label:'Feb 3'},
+    {sess:'apr8',key:'hr_work',color:'#3fb950',label:'Apr 8'}
+  ]
+});
+
+drawLine(document.getElementById('c-ratio'),{
+  h:400,yMin:-1.0,yMax:2.8,yLb:'Late/Early Slope Ratio',dec:2,
+  refs:[
+    {v:1.0,color:'#ffd166',label:'1.0 = still dropping at end'},
+    {v:0.0,color:'#58a6ff',label:'0.0 = plateaued'}
+  ],
+  series:[
+    {sess:'feb3',key:'ratio',color:'#f78166',label:'Feb 3'},
+    {sess:'apr8',key:'ratio',color:'#3fb950',label:'Apr 8'}
+  ]
+});
+window.addEventListener('resize',()=>location.reload());
+</script></body></html>
